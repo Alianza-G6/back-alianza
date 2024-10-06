@@ -3,11 +3,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
-public class DBConnectionProvider {
+public class ConexaoBanco {
 
     private final DataSource dataSource;
 
-    public DBConnectionProvider() {
+    public ConexaoBanco() {
         BasicDataSource basicDataSource = new BasicDataSource();
         basicDataSource.setUrl("jdbc:mysql://IP-INSTÂNCIA:3306/Alianza");
         basicDataSource.setUsername("root");

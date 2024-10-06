@@ -1,18 +1,14 @@
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
 
-        DBConnectionProvider dbConnectionProvider = new DBConnectionProvider();
-        JdbcTemplate connection = dbConnectionProvider.getConnection();
+        ConexaoBanco conexaoBanco = new ConexaoBanco();
+        JdbcTemplate connection = conexaoBanco.getConnection();
         List<Funcionario> listaUsuario = connection.query("SELECT * FROM Funcionario;", new BeanPropertyRowMapper<>(Funcionario.class));
 
         System.out.println("Funcionário Existentes");

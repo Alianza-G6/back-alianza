@@ -2,7 +2,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 
-public class S3Downloader {
+public class BaixarBucket {
     public static void main(String[] args) {
         String url = "https://s3-alianza.s3.amazonaws.com/Base+de+dados+-+Voos.csv"; // URL do arquivo
         //Criar uma pasta na main chamada 'resources'
