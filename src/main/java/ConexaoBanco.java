@@ -1,22 +1,31 @@
-import org.apache.commons.dbcp2.BasicDataSource;
-import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class ConexaoBanco {
-    private static final String URL = "jdbc:mysql://3.88.249.82:3306/Alianza";
-    private static final String USER = "seu_usuario";
-    private static final String PASSWORD = "sua_senha";
+    private String url;
+    private String usuario;
+    private String senha;
+    private Connection conexao;
 
-    private JdbcTemplate jdbcTemplate;
-
-    public ConexaoBanco() {
-        BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setUrl(URL);
-        dataSource.setUsername(USER);
-        dataSource.setPassword(PASSWORD);
-        jdbcTemplate = new JdbcTemplate(dataSource);
+    public ConexaoBanco(String url, String usuario, String senha) {
+        this.url = url;
+        this.usuario = usuario;
+        this.senha = senha;
     }
 
-    public JdbcTemplate getJdbcTemplate() {
-        return jdbcTemplate;
+    // Método para obter a conexão com o banco de dados
+    public Connection getConnection() throws SQLException {
+        if (conexao == null || conexao.isClosed()) {
+            conexao = DriverManager.getConnection(url, usuario, senha);
+        }
+        return conexao;
+    }
+
+    // Método para fechar a conexão
+    public void close() throws SQLException {
+        if (conexao != null && !conexao.isClosed()) {
+            conexao.close();
+        }
     }
 }
