@@ -1,15 +1,15 @@
 public class Voo {
     private int idVoo;
-    private int companhiaIdCompanhia; // Chave estrangeira
-    private int idAeroportoInicial; // Chave estrangeira
-    private int idAeroportoFinal; // Chave estrangeira
+    private int companhiaId;
+    private int aeroportoInicialId;
+    private int aeroportoFinalId;
     private String prevChegada;
     private String chegada;
     private String prevSaida;
     private String saida;
     private String situacaoVoo;
 
-    // Getters e Setters
+
     public int getIdVoo() {
         return idVoo;
     }
@@ -18,28 +18,28 @@ public class Voo {
         this.idVoo = idVoo;
     }
 
-    public int getCompanhiaIdCompanhia() {
-        return companhiaIdCompanhia;
+    public int getCompanhiaId() {
+        return companhiaId;
     }
 
-    public void setCompanhiaIdCompanhia(int companhiaIdCompanhia) {
-        this.companhiaIdCompanhia = companhiaIdCompanhia;
+    public void setCompanhiaId(int companhiaId) {
+        this.companhiaId = companhiaId;
     }
 
-    public int getIdAeroportoInicial() {
-        return idAeroportoInicial;
+    public int getAeroportoInicialId() {
+        return aeroportoInicialId;
     }
 
-    public void setIdAeroportoInicial(int idAeroportoInicial) {
-        this.idAeroportoInicial = idAeroportoInicial;
+    public void setAeroportoInicialId(int aeroportoInicialId) {
+        this.aeroportoInicialId = aeroportoInicialId;
     }
 
-    public int getIdAeroportoFinal() {
-        return idAeroportoFinal;
+    public int getAeroportoFinalId() {
+        return aeroportoFinalId;
     }
 
-    public void setIdAeroportoFinal(int idAeroportoFinal) {
-        this.idAeroportoFinal = idAeroportoFinal;
+    public void setAeroportoFinalId(int aeroportoFinalId) {
+        this.aeroportoFinalId = aeroportoFinalId;
     }
 
     public String getPrevChegada() {
@@ -84,6 +84,16 @@ public class Voo {
 
     @Override
     public String toString() {
-        return "Voo{idVoo=" + idVoo + ", companhiaIdCompanhia=" + companhiaIdCompanhia + ", idAeroportoInicial=" + idAeroportoInicial + ", idAeroportoFinal=" + idAeroportoFinal + ", prevChegada='" + prevChegada + "', chegada='" + chegada + "', prevSaida='" + prevSaida + "', saida='" + saida + "', situacaoVoo='" + situacaoVoo + "'}";
+        return "Voo{" +
+                "idVoo=" + idVoo +
+                ", companhiaId=" + companhiaId +
+                ", aeroportoInicialId=" + aeroportoInicialId +
+                ", aeroportoFinalId=" + aeroportoFinalId +
+                ", prevChegada='" + prevChegada + '\'' +
+                ", chegada='" + chegada + '\'' +
+                ", prevSaida='" + prevSaida + '\'' +
+                ", saida='" + saida + '\'' +
+                ", situacaoVoo='" + situacaoVoo + '\'' +
+                '}';
     }
 }

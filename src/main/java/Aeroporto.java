@@ -6,7 +6,6 @@ public class Aeroporto {
     private String cep;
     private int funcionarioIdFuncionario; // Chave estrangeira
 
-    // Getters e Setters
     public int getIdAeroporto() {
         return idAeroporto;
     }
