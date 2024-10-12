@@ -1,31 +1,24 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 public class ConexaoBanco {
-    private String url;
-    private String usuario;
-    private String senha;
-    private Connection conexao;
 
-    public ConexaoBanco(String url, String usuario, String senha) {
-        this.url = url;
-        this.usuario = usuario;
-        this.senha = senha;
+//    private static final String databaseUrl = "jdbc:mysql://localhost:3306/Alianza"; -> TESTE LOCALHOST
+
+
+    private static final String databaseUrl = System.getenv("DATABASE_URL");
+    private static final String databaseUser = System.getenv("DATABASE_USER");
+    private static final String databasePassword = System.getenv("DATABASE_PASSWORD");
+
+    private static final BasicDataSource dataSource = new BasicDataSource();
+
+    static {
+        dataSource.setUrl(databaseUrl);
+        dataSource.setUsername(databaseUser);
+        dataSource.setPassword(databasePassword);
     }
 
-    // Método para obter a conexão com o banco de dados
-    public Connection getConnection() throws SQLException {
-        if (conexao == null || conexao.isClosed()) {
-            conexao = DriverManager.getConnection(url, usuario, senha);
-        }
-        return conexao;
-    }
-
-    // Método para fechar a conexão
-    public void close() throws SQLException {
-        if (conexao != null && !conexao.isClosed()) {
-            conexao.close();
-        }
+    public static JdbcTemplate getConnection() {
+        return new JdbcTemplate(dataSource);
     }
 }

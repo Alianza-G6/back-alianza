@@ -1,99 +1,130 @@
+import java.time.LocalDateTime;
+
 public class Voo {
-    private int idVoo;
-    private int companhiaId;
-    private int aeroportoInicialId;
-    private int aeroportoFinalId;
-    private String prevChegada;
-    private String chegada;
-    private String prevSaida;
-    private String saida;
-    private String situacaoVoo;
+    private Integer idVoo;
+    private Integer fkCompanhia;
+    private String numeroVoo;
+    private String codigoDI;
+    private String codigoTipoLinha;
+    private Integer fkAeroportoOrigem;
+    private LocalDateTime partidaPrevista;
+    private LocalDateTime partidaReal;
+    private Integer fkAeroportoDestino;
+    private LocalDateTime chegadaPrevista;
+    private LocalDateTime chegadaReal;
+    private String StatusVoo;
 
-
-    public int getIdVoo() {
+    public Integer getIdVoo() {
         return idVoo;
     }
 
-    public void setIdVoo(int idVoo) {
+    public void setIdVoo(Integer idVoo) {
         this.idVoo = idVoo;
     }
 
-    public int getCompanhiaId() {
-        return companhiaId;
+    public Integer getFkCompanhia() {
+        return fkCompanhia;
     }
 
-    public void setCompanhiaId(int companhiaId) {
-        this.companhiaId = companhiaId;
+    public void setFkCompanhia(Integer fkCompanhia) {
+        this.fkCompanhia = fkCompanhia;
     }
 
-    public int getAeroportoInicialId() {
-        return aeroportoInicialId;
+    public String getNumeroVoo() {
+        return numeroVoo;
     }
 
-    public void setAeroportoInicialId(int aeroportoInicialId) {
-        this.aeroportoInicialId = aeroportoInicialId;
+    public void setNumeroVoo(String numeroVoo) {
+        this.numeroVoo = numeroVoo;
     }
 
-    public int getAeroportoFinalId() {
-        return aeroportoFinalId;
+    public String getCodigoDI() {
+        return codigoDI;
     }
 
-    public void setAeroportoFinalId(int aeroportoFinalId) {
-        this.aeroportoFinalId = aeroportoFinalId;
+    public void setCodigoDI(String codigoDI) {
+        this.codigoDI = codigoDI;
     }
 
-    public String getPrevChegada() {
-        return prevChegada;
+    public String getCodigoTipoLinha() {
+        return codigoTipoLinha;
     }
 
-    public void setPrevChegada(String prevChegada) {
-        this.prevChegada = prevChegada;
+    public void setCodigoTipoLinha(String codigoTipoLinha) {
+        this.codigoTipoLinha = codigoTipoLinha;
     }
 
-    public String getChegada() {
-        return chegada;
+    public Integer getFkAeroportoOrigem() {
+        return fkAeroportoOrigem;
     }
 
-    public void setChegada(String chegada) {
-        this.chegada = chegada;
+    public void setFkAeroportoOrigem(Integer fkAeroportoOrigem) {
+        this.fkAeroportoOrigem = fkAeroportoOrigem;
     }
 
-    public String getPrevSaida() {
-        return prevSaida;
+    public LocalDateTime getPartidaPrevista() {
+        return partidaPrevista;
     }
 
-    public void setPrevSaida(String prevSaida) {
-        this.prevSaida = prevSaida;
+    public void setPartidaPrevista(LocalDateTime partidaPrevista) {
+        this.partidaPrevista = partidaPrevista;
     }
 
-    public String getSaida() {
-        return saida;
+    public LocalDateTime getPartidaReal() {
+        return partidaReal;
     }
 
-    public void setSaida(String saida) {
-        this.saida = saida;
+    public void setPartidaReal(LocalDateTime partidaReal) {
+        this.partidaReal = partidaReal;
     }
 
-    public String getSituacaoVoo() {
-        return situacaoVoo;
+    public Integer getFkAeroportoDestino() {
+        return fkAeroportoDestino;
     }
 
-    public void setSituacaoVoo(String situacaoVoo) {
-        this.situacaoVoo = situacaoVoo;
+    public void setFkAeroportoDestino(Integer fkAeroportoDestino) {
+        this.fkAeroportoDestino = fkAeroportoDestino;
+    }
+
+    public LocalDateTime getChegadaPrevista() {
+        return chegadaPrevista;
+    }
+
+    public void setChegadaPrevista(LocalDateTime chegadaPrevista) {
+        this.chegadaPrevista = chegadaPrevista;
+    }
+
+    public LocalDateTime getChegadaReal() {
+        return chegadaReal;
+    }
+
+    public void setChegadaReal(LocalDateTime chegadaReal) {
+        this.chegadaReal = chegadaReal;
+    }
+
+    public String getStatusVoo() {
+        return StatusVoo;
+    }
+
+    public void setStatusVoo(String statusVoo) {
+        StatusVoo = statusVoo;
     }
 
     @Override
     public String toString() {
         return "Voo{" +
                 "idVoo=" + idVoo +
-                ", companhiaId=" + companhiaId +
-                ", aeroportoInicialId=" + aeroportoInicialId +
-                ", aeroportoFinalId=" + aeroportoFinalId +
-                ", prevChegada='" + prevChegada + '\'' +
-                ", chegada='" + chegada + '\'' +
-                ", prevSaida='" + prevSaida + '\'' +
-                ", saida='" + saida + '\'' +
-                ", situacaoVoo='" + situacaoVoo + '\'' +
+                ", fkCompanhia=" + fkCompanhia +
+                ", numeroVoo='" + numeroVoo + '\'' +
+                ", codigoDI='" + codigoDI + '\'' +
+                ", codigoTipoLinha='" + codigoTipoLinha + '\'' +
+                ", fkAeroportoOrigem=" + fkAeroportoOrigem +
+                ", partidaPrevista=" + partidaPrevista +
+                ", partidaReal=" + partidaReal +
+                ", fkAeroportoDestino=" + fkAeroportoDestino +
+                ", chegadaPrevista=" + chegadaPrevista +
+                ", chegadaReal=" + chegadaReal +
+                ", StatusVoo='" + StatusVoo + '\'' +
                 '}';
     }
 }
