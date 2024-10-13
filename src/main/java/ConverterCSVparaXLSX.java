@@ -10,7 +10,6 @@ public class ConverterCSVparaXLSX {
 
     public void converter() {
         String nomeCSV = BaixarCSV.NOME_BASE_BAIXADA;
-        System.out.println("O NOME DA BASE É " + nomeCSV);
 
         try (Workbook workbook = new XSSFWorkbook();
              BufferedReader br = new BufferedReader(new FileReader(nomeCSV))) {
@@ -41,7 +40,7 @@ public class ConverterCSVparaXLSX {
 
             try (FileOutputStream escritor = new FileOutputStream("src/" + nomeXLSX)) {
                 workbook.write(escritor);
-                System.out.println("Arquivo XLSX criado com sucesso: src/" + nomeXLSX);
+                System.out.println("Arquivo XLSX criado com sucesso: " + nomeXLSX);
             }
         } catch (IOException e) {
             e.printStackTrace();
