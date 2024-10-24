@@ -1,35 +1,26 @@
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.io.IOException;
+import java.util.List;
 
-public class    Main {
+public class Main {
     public static void main(String[] args) {
-        try {
-            Log.generateLog("Aplicação iniciada.");
 
-            Log.generateLog("Conexão com o banco de dados estabelecida.");
-            JdbcTemplate jdbcTemplate = ConexaoBanco.getConnection();
+        BaixarCSV baixarBase = new BaixarCSV();
 
-            BaixarCSV baixarBase = new BaixarCSV();
-            baixarBase.baixar("s3-alianza");
-            Log.generateLog("Arquivo CSV baixado.");
+        baixarBase.baixar("s3-alianza");
 
-            ConverterCSVparaXLSX converterCSVparaXLSX = new ConverterCSVparaXLSX();
-            converterCSVparaXLSX.converter();
-            Log.generateLog("Arquivo CSV convertido para XLSX.");
+        ConverterCSVparaXLSX converterCSVparaXLSX = new ConverterCSVparaXLSX();
 
-            Log.generateLog("Aplicação finalizada.");
+        converterCSVparaXLSX.converter();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            try {
-                Log.generateLog("Erro ao gerar log: " + e.getMessage());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JdbcTemplate jdbcTemplate = ConexaoBanco.getConnection();
+
+        LeitorExcel leitorExcel = new LeitorExcel(jdbcTemplate);
+
+        String caminhoArquivo = "src\\vra_2022_11.xlsx";
+
+        leitorExcel.lerEInserirDadosVoos(caminhoArquivo);
+
+
     }
 }
-
