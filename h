@@ -1,0 +1,110 @@
+[33mcommit 73266e28807bbdf00b6d6158a06df7f7fb56517d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mrefatoracaoETL[m[33m, [m[1;31morigin/refatoracaoETL[m[33m)[m
+Author: nth-domingues <nathan.piazentin@sptech.school>
+Date:   Wed Oct 16 17:33:10 2024 -0300
+
+    Código para criação de pasta e arquivo TXT que irão armazenar os logs
+
+[33mcommit 43efb0546e878256fe35941317b94305e57b79ee[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Sun Oct 13 02:00:25 2024 -0300
+
+    ETL COMPLETO FINALMENTE FINALIZADO !
+
+[33mcommit cbd8b6617a179e0ec214fcc74fded8364895043a[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Sat Oct 12 18:39:15 2024 -0300
+
+    Removendo dependencias de LOG (estava dando erro)
+
+[33mcommit 61d4e64706dc4fe88b215fc9e168395af71877d8[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Sat Oct 12 16:16:13 2024 -0300
+
+    Java criando conexão com S3, baixando arquivo .CSV e convertendo para .XLSX
+
+[33mcommit 675530ea5dd1aac9330924c3b1c4750e5fcae198[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Sat Oct 12 13:30:49 2024 -0300
+
+    Conexão com banco de dados funcionando de forma POO
+
+[33mcommit 8a8f096ab860451a255285c6ecf041c3f7a89fc3[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Sat Oct 12 08:20:35 2024 -0300
+
+    refatoração total do BACKEND
+
+[33mcommit 34c04ff9b6f35781969d0a17e7d9028875a84648[m[33m ([m[1;31morigin/homologacao[m[33m)[m
+Author: RafaelEffgen <rafael.effgen@sptech.school>
+Date:   Mon Oct 7 20:37:46 2024 -0300
+
+    Dividindo o código em classes
+
+[33mcommit f2f0c5617ea308bfb6f0b5e5c941e2989a31e8f5[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Mon Oct 7 02:08:27 2024 -0300
+
+    Subindo a main que está fazendo o ETL
+
+[33mcommit 0f7cf0409f3d1a4193051be1601951f1b468f138[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Mon Oct 7 02:06:20 2024 -0300
+
+    ETL Completo
+
+[33mcommit f4852449f8f1ba00a2cf5e0dc3af22fbb0414c05[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Sun Oct 6 21:29:47 2024 -0300
+
+    Desenvolvendo o ETL
+
+[33mcommit 17c67ca701846bfcff921663da32fea4abcf1d56[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Sun Oct 6 15:38:50 2024 -0300
+
+    Refatoração do nome das classes de Conexão e BaixarS3
+
+[33mcommit 49e44bf6e9397b5a1d6db39ab843e50fcab7179c[m
+Merge: b0a2c19 d00decf
+Author: Felipe Ferreira Albertim <160399186+FelipeAlbertim@users.noreply.github.com>
+Date:   Tue Oct 1 16:37:25 2024 -0300
+
+    Merge pull request #1 from Alianza-G6/tratativaDosDados
+    
+    Tratativa dos dados concluida
+
+[33mcommit d00decf39f2733d71343ee055ab8e029f031de11[m[33m ([m[1;31morigin/tratativaDosDados[m[33m)[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Tue Oct 1 16:35:18 2024 -0300
+
+    Tratativa dos dados concluida
+
+[33mcommit b0a2c1993d6cbf35d72646009d167a2a440df620[m
+Author: RafaelEffgen <rafael.effgen@sptech.school>
+Date:   Mon Sep 30 23:19:48 2024 -0300
+
+    Fazendo a extracao do S3
+
+[33mcommit a1dde481e30edbdd218a2c837de11848d2ac8c49[m[33m ([m[1;31morigin/master[m[33m, [m[1;31morigin/Log's-Nathan[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Sat Sep 28 02:06:19 2024 -0300
+
+    java se comunicando com o banco, início do desenvolvimento do ETL
+
+[33mcommit 416e30292d002a1094070adb1326c9455621b18e[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Thu Sep 26 23:36:59 2024 -0300
+
+    Colocando mysql conector e apachePOI
+
+[33mcommit d19eacf8558dc677d82fe41248830aaaba9b53aa[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Thu Sep 26 23:20:19 2024 -0300
+
+    Adicionando a dependencia JDBC para conexão com banco
+
+[33mcommit 5a49dd16f05c8b74903836152d1d6d7e7ad372cc[m
+Author: FelipeAlbertim <felipe.albertim@sptech.school>
+Date:   Fri Sep 6 01:35:11 2024 -0300
+
+    Simulação de Log's

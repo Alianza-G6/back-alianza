@@ -14,6 +14,8 @@ public class ConverterCSVparaXLSX {
         try (Workbook workbook = new XSSFWorkbook();
              BufferedReader br = new BufferedReader(new FileReader(nomeCSV))) {
 
+            Log.generateLog("Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV);
+
             Sheet planilha = workbook.createSheet("Dados");
             String linha;
             int indiceLinha = 0;
@@ -40,10 +42,16 @@ public class ConverterCSVparaXLSX {
 
             try (FileOutputStream escritor = new FileOutputStream("src/" + nomeXLSX)) {
                 workbook.write(escritor);
-                System.out.println("Arquivo XLSX criado com sucesso: " + nomeXLSX);
+                // Log de sucesso na criação do arquivo
+                Log.generateLog("Arquivo XLSX criado com sucesso: " + nomeXLSX);
             }
         } catch (IOException e) {
             e.printStackTrace();
+            try {
+                Log.generateLog("Erro ao converter o arquivo CSV para XLSX: " + e.getMessage());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 }
