@@ -5,6 +5,8 @@ import java.io.IOException;
 
 public class ConexaoBanco {
 
+    //    jdbc:mysql://localhost:3306/Alianza -> TESTE LOCALHOST
+
     private static final String databaseUrl = System.getenv("DATABASE_URL");
     private static final String databaseUser = System.getenv("DATABASE_USER");
     private static final String databasePassword = System.getenv("DATABASE_PASSWORD");
