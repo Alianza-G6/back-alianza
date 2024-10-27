@@ -1,27 +1,55 @@
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        try {
+            Log.generateLog("Aplicação iniciada.");
 
-        DBConnectionProvider dbConnectionProvider = new DBConnectionProvider();
-        JdbcTemplate connection = dbConnectionProvider.getConnection();
-        List<Funcionario> listaUsuario = connection.query("SELECT * FROM Funcionario;", new BeanPropertyRowMapper<>(Funcionario.class));
+            JdbcTemplate jdbcTemplate = ConexaoBanco.getConnection();
+            Log.generateLog("Conexão com o banco de dados estabelecida.");
 
-        System.out.println("Funcionário Existentes");
-        for (Funcionario funcionario : listaUsuario) {
-            System.out.println(funcionario);
+            BaixarCSV baixarBase = new BaixarCSV();
+            baixarBase.baixar("s3-alianza");
+            Log.generateLog("Arquivo CSV baixado.");
+
+            ConverterCSVparaXLSX converterCSVparaXLSX = new ConverterCSVparaXLSX();
+            converterCSVparaXLSX.converter();
+            Log.generateLog("Arquivo CSV convertido para XLSX.");
+
+            LeitorExcel leitorExcel = new LeitorExcel(jdbcTemplate);
+            String caminhoArquivo = "src\\vra_2022_11.xlsx";
+            leitorExcel.lerEInserirDadosVoos(caminhoArquivo);
+
+            Log.generateLog("Aplicação finalizada.");
+
+
+            File arquivoXLSX = new File("src/vra_2022_11.xlsx");
+            File arquivoCSV = new File("vra_2022_11.csv");
+
+            if (arquivoXLSX.delete()) {
+                Log.generateLog("Arquivo XLSX deletado com sucesso.");
+            } else {
+                Log.generateLog("Falha ao deletar o arquivo XLSX.");
+            }
+
+            if (arquivoCSV.delete()) {
+                Log.generateLog("Arquivo CSV deletado com sucesso.");
+            } else {
+                Log.generateLog("Falha ao deletar o arquivo CSV.");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            try {
+                Log.generateLog("Erro ao gerar log: " + e.getMessage());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
-//        FileInputStream arquivoS3 = new FileInputStream("https://s3-alianza.s3.amazonaws.com/Base+de+dados+-+Voos.csv");
-//        Workbook planilha = new HSSFWorkbook(arquivoS3);
-//        Sheet tabela = planilha.getSheetAt(0);
     }
 }
