@@ -71,8 +71,22 @@
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.20.0</version> <!-- Use a versão mais recente -->
+            <version>2.20.0</version>
         </dependency>
+
+        <!-- Dependência de tratamento de erro -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version> <!-- ou a versão mais recente -->
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.2.3</version> <!-- ou a versão mais recente -->
+        </dependency>
+
+
     </dependencies>
 
 

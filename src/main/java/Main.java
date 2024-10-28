@@ -6,49 +6,48 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         try {
-            Log.generateLog("Aplicação iniciada.");
+            System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "error");
+
+            System.out.println("Aplicação iniciada.");
 
             JdbcTemplate jdbcTemplate = ConexaoBanco.getConnection();
-            Log.generateLog("Conexão com o banco de dados estabelecida.");
+            System.out.println("Conexão com o banco de dados estabelecida.");
 
             BaixarCSV baixarBase = new BaixarCSV();
             baixarBase.baixar("s3-alianza");
-            Log.generateLog("Arquivo CSV baixado.");
+            System.out.println("Arquivo CSV baixado.");
 
             ConverterCSVparaXLSX converterCSVparaXLSX = new ConverterCSVparaXLSX();
             converterCSVparaXLSX.converter();
-            Log.generateLog("Arquivo CSV convertido para XLSX.");
+            System.out.println("Arquivo CSV convertido para XLSX.");
 
             LeitorExcel leitorExcel = new LeitorExcel(jdbcTemplate);
-            String caminhoArquivo = "src\\vra_2022_11.xlsx";
+            String caminhoArquivo = "src/vra_2022_11.xlsx";
             leitorExcel.lerEInserirDadosVoos(caminhoArquivo);
+            System.out.println("Dados do voo inseridos no banco de dados.");
 
-            Log.generateLog("Aplicação finalizada.");
-
+            System.out.println("Aplicação finalizada.");
 
             File arquivoXLSX = new File("src/vra_2022_11.xlsx");
             File arquivoCSV = new File("vra_2022_11.csv");
 
             if (arquivoXLSX.delete()) {
-                Log.generateLog("Arquivo XLSX deletado com sucesso.");
+                System.out.println("Arquivo XLSX deletado com sucesso.");
             } else {
-                Log.generateLog("Falha ao deletar o arquivo XLSX.");
+                System.out.println("Falha ao deletar o arquivo XLSX.");
             }
 
             if (arquivoCSV.delete()) {
-                Log.generateLog("Arquivo CSV deletado com sucesso.");
+                System.out.println("Arquivo CSV deletado com sucesso.");
             } else {
-                Log.generateLog("Falha ao deletar o arquivo CSV.");
+                System.out.println("Falha ao deletar o arquivo CSV.");
             }
 
         } catch (IOException e) {
+            System.out.println("Erro ao gerar log: " + e.getMessage());
             e.printStackTrace();
-            try {
-                Log.generateLog("Erro ao gerar log: " + e.getMessage());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
         } catch (Exception e) {
+            System.out.println("Erro inesperado: " + e.getMessage());
             e.printStackTrace();
         }
     }

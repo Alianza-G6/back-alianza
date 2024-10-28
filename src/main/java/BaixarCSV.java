@@ -15,7 +15,9 @@ public class BaixarCSV {
         S3Client s3Client = new ConexaoS3().getS3Client();
 
         try {
-            Log.generateLog("Iniciando download dos arquivos do bucket: " + NomeDataLake);
+            String mensagemIniciar = "Iniciando download dos arquivos do bucket: " + NomeDataLake;
+            Log.generateLog(mensagemIniciar);
+            System.out.println(mensagemIniciar);
 
             List<S3Object> objects = s3Client.listObjects(ListObjectsRequest.builder()
                     .bucket(NomeDataLake)
@@ -33,15 +35,21 @@ public class BaixarCSV {
                 destino.getParentFile().mkdirs(); // Cria diretórios, se necessário
                 Files.copy(inputStream, destino.toPath());
 
-                Log.generateLog("Arquivo baixado com sucesso: " + object.key());
+                String mensagemBaixado = "Arquivo baixado com sucesso: " + object.key();
+                Log.generateLog(mensagemBaixado);
+                System.out.println(mensagemBaixado);
                 NOME_BASE_BAIXADA = object.key();
             }
 
-            Log.generateLog("Download dos arquivos do bucket " + NomeDataLake + " finalizado.");
+            String mensagemFinalizado = "Download dos arquivos do bucket " + NomeDataLake + " finalizado.";
+            Log.generateLog(mensagemFinalizado);
+            System.out.println(mensagemFinalizado);
 
         } catch (IOException | S3Exception e) {
             e.printStackTrace();
-            Log.generateLog("Erro ao fazer download dos arquivos do bucket: " + NomeDataLake + " - " + e.getMessage());
+            String mensagemErro = "Erro ao fazer download dos arquivos do bucket: " + NomeDataLake + " - " + e.getMessage();
+            Log.generateLog(mensagemErro);
+            System.out.println(mensagemErro);
         }
     }
 }

@@ -24,7 +24,7 @@ public class Log {
         bw.write(timestamp + " - " + mensagem);
         bw.newLine();
         bw.flush();
-        System.out.println("Log Gerado com sucesso!");
+//        System.out.println("Log Gerado com sucesso!");
     }
     private static void openNewLogFile() throws IOException {
         Path logDirectoryPath = Paths.get("C:\\Users\\Public\\LogsAlianza");

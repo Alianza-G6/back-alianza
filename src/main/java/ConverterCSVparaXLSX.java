@@ -14,19 +14,20 @@ public class ConverterCSVparaXLSX {
 
         if (!csvFile.exists()) {
             Log.generateLog("Arquivo CSV não encontrado: " + csvFile.getAbsolutePath());
+            System.out.println("Arquivo CSV não encontrado: " + csvFile.getAbsolutePath());
             return;
         }
 
         try (Workbook workbook = new XSSFWorkbook();
              BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
+            System.out.println("Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV);
             Log.generateLog("Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV);
 
             Sheet planilha = workbook.createSheet("Dados");
             String linha;
             int indiceLinha = 0;
 
-            // Ler cabeçalho do CSV
             if ((linha = br.readLine()) != null) {
                 Row cabecalho = planilha.createRow(indiceLinha++);
                 String[] nomesColunas = linha.split(";");
@@ -35,7 +36,6 @@ public class ConverterCSVparaXLSX {
                 }
             }
 
-            // Ler o restante do CSV
             while ((linha = br.readLine()) != null) {
                 Row linhaAtual = planilha.createRow(indiceLinha++);
                 String[] colunas = linha.split(";");
@@ -47,14 +47,17 @@ public class ConverterCSVparaXLSX {
 
             String nomeBase = csvFile.getName();
             String nomeXLSX = nomeBase.substring(0, nomeBase.lastIndexOf('.')) + ".xlsx";
+            System.out.println("Nome do arquivo XLSX a ser criado: " + nomeXLSX);
 
             try (FileOutputStream escritor = new FileOutputStream("src/" + nomeXLSX)) {
                 workbook.write(escritor);
                 Log.generateLog("Arquivo XLSX criado com sucesso: " + nomeXLSX);
+                System.out.println("Arquivo XLSX criado com sucesso: " + nomeXLSX);
             }
         } catch (IOException e) {
             e.printStackTrace();
             Log.generateLog("Erro ao converter o arquivo CSV para XLSX: " + e.getMessage());
+            System.out.println("Erro ao converter o arquivo CSV para XLSX: " + e.getMessage());
         }
     }
 }
