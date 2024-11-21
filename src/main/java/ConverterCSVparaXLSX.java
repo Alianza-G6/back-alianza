@@ -14,7 +14,9 @@ public class ConverterCSVparaXLSX {
         try (Workbook workbook = new XSSFWorkbook();
              BufferedReader br = new BufferedReader(new FileReader(nomeCSV))) {
 
-            Log.generateLog("Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV);
+            String logMessage = "Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV;
+            Log.generateLog(logMessage);
+            enviarParaSlack(logMessage);
 
             Sheet planilha = workbook.createSheet("Dados");
             String linha;
@@ -42,16 +44,27 @@ public class ConverterCSVparaXLSX {
 
             try (FileOutputStream escritor = new FileOutputStream("src/" + nomeXLSX)) {
                 workbook.write(escritor);
-                // Log de sucesso na criação do arquivo
-                Log.generateLog("Arquivo XLSX criado com sucesso: " + nomeXLSX);
+                String successMessage = "Arquivo XLSX criado com sucesso: " + nomeXLSX;
+                Log.generateLog(successMessage);
+                enviarParaSlack(successMessage);
             }
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                Log.generateLog("Erro ao converter o arquivo CSV para XLSX: " + e.getMessage());
+                String errorMessage = "Erro ao converter o arquivo CSV para XLSX: " + e.getMessage();
+                Log.generateLog(errorMessage);
+                enviarParaSlack(errorMessage);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+        }
+    }
+
+    public void enviarParaSlack(String message) {
+        try {
+            NotificacaoSlack.EnviarNotificacaoSlack(message);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

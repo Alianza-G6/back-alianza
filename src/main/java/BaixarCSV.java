@@ -12,12 +12,18 @@ public class BaixarCSV {
     public static String NOME_BASE_BAIXADA;
 
     public void baixar(String NomeDataLake) {
-        S3Client S3Client = new ConexaoS3().getS3Client();
+        S3Client s3Client = new ConexaoS3().getS3Client();
 
         try {
-            Log.generateLog("Iniciando download dos arquivos do bucket: " + NomeDataLake);
+            String logMessage = "Iniciando download dos arquivos do bucket: " + NomeDataLake;
+            Log.generateLog(logMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(logMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            List<S3Object> objects = S3Client.listObjects(ListObjectsRequest.builder()
+            List<S3Object> objects = s3Client.listObjects(ListObjectsRequest.builder()
                     .bucket(NomeDataLake)
                     .build()).contents();
 
@@ -27,20 +33,38 @@ public class BaixarCSV {
                         .key(object.key())
                         .build();
 
-                InputStream inputStream = S3Client.getObject(getObjectRequest, ResponseTransformer.toInputStream());
+                InputStream inputStream = s3Client.getObject(getObjectRequest, ResponseTransformer.toInputStream());
                 Files.copy(inputStream, new File(object.key()).toPath());
 
-                Log.generateLog("Arquivo baixado com sucesso: " + object.key());
+                String successMessage = "Arquivo baixado com sucesso: " + object.key();
+                Log.generateLog(successMessage);
+                try {
+                    NotificacaoSlack.EnviarNotificacaoSlack(successMessage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 NOME_BASE_BAIXADA = object.key();
             }
 
-            Log.generateLog("Download dos arquivos do bucket " + NomeDataLake + " finalizado.");
+            String completionMessage = "Download dos arquivos do bucket " + NomeDataLake + " finalizado.";
+            Log.generateLog(completionMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(completionMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         } catch (IOException | S3Exception e) {
             e.printStackTrace();
             try {
-                Log.generateLog("Erro ao fazer download dos arquivos do bucket: " + NomeDataLake + " - " + e.getMessage());
+                String errorMessage = "Erro ao fazer download dos arquivos do bucket: " + NomeDataLake + " - " + e.getMessage();
+                Log.generateLog(errorMessage);
+                try {
+                    NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }

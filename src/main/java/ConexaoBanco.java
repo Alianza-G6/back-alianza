@@ -13,18 +13,34 @@ public class ConexaoBanco {
 
     static {
         try {
-            Log.generateLog("Inicializando conexão com o banco de dados...");
+            String logMessage = "Inicializando conexão com o banco de dados...";
+            Log.generateLog(logMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(logMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             dataSource.setUrl(databaseUrl);
             dataSource.setUsername(databaseUser);
             dataSource.setPassword(databasePassword);
 
-            Log.generateLog("Conexão com o banco configurada com sucesso.");
+            String successMessage = "Conexão com o banco configurada com sucesso.";
+            Log.generateLog(successMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(successMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             try {
-                Log.generateLog("Erro na configuração do banco de dados: " + e.getMessage());
+                String errorMessage = "Erro na configuração do banco de dados: " + e.getMessage();
+                Log.generateLog(errorMessage);
+                NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);
             } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }
@@ -32,15 +48,34 @@ public class ConexaoBanco {
 
     public static JdbcTemplate getConnection() {
         try {
-            Log.generateLog("Tentando estabelecer conexão com o banco de dados...");
+            String logMessage = "Tentando estabelecer conexão com o banco de dados...";
+            Log.generateLog(logMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(logMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-            Log.generateLog("Conexão estabelecida com sucesso.");
+
+            String successMessage = "Conexão estabelecida com sucesso.";
+            Log.generateLog(successMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(successMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             return jdbcTemplate;
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                Log.generateLog("Erro ao conectar ao banco de dados: " + e.getMessage());
+                String errorMessage = "Erro ao conectar ao banco de dados: " + e.getMessage();
+                Log.generateLog(errorMessage);
+                NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);
             } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
             return null;
