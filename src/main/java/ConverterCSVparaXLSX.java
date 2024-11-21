@@ -8,11 +8,17 @@ import java.io.IOException;
 
 public class ConverterCSVparaXLSX {
 
-    public void converter() {
+    public void converter() throws IOException {
         String nomeCSV = BaixarCSV.NOME_BASE_BAIXADA;
+        File csvFile = new File("src/" + nomeCSV);
+
+        if (!csvFile.exists()) {
+            Log.generateLog("Arquivo CSV não encontrado: " + csvFile.getAbsolutePath());
+            return;
+        }
 
         try (Workbook workbook = new XSSFWorkbook();
-             BufferedReader br = new BufferedReader(new FileReader(nomeCSV))) {
+             BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
 
             String logMessage = "Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV;
             Log.generateLog(logMessage);
@@ -39,7 +45,7 @@ public class ConverterCSVparaXLSX {
                 }
             }
 
-            String nomeBase = new File(nomeCSV).getName();
+            String nomeBase = csvFile.getName();
             String nomeXLSX = nomeBase.substring(0, nomeBase.lastIndexOf('.')) + ".xlsx";
 
             try (FileOutputStream escritor = new FileOutputStream("src/" + nomeXLSX)) {
@@ -47,6 +53,7 @@ public class ConverterCSVparaXLSX {
                 String successMessage = "Arquivo XLSX criado com sucesso: " + nomeXLSX;
                 Log.generateLog(successMessage);
                 enviarParaSlack(successMessage);
+                Log.generateLog("Arquivo XLSX criado com sucesso: " + nomeXLSX);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -57,6 +64,7 @@ public class ConverterCSVparaXLSX {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+            Log.generateLog("Erro ao converter o arquivo CSV para XLSX: " + e.getMessage());
         }
     }
 

@@ -1,4 +1,6 @@
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import java.io.File;
 import java.io.IOException;
 
 public class Main {
@@ -22,6 +24,22 @@ public class Main {
             leitorExcel.lerEInserirDadosVoos(caminhoArquivo);
 
             Log.generateLog("Aplicação finalizada.");
+
+
+            File arquivoXLSX = new File("src/vra_2022_11.xlsx");
+            File arquivoCSV = new File("vra_2022_11.csv");
+
+            if (arquivoXLSX.delete()) {
+                Log.generateLog("Arquivo XLSX deletado com sucesso.");
+            } else {
+                Log.generateLog("Falha ao deletar o arquivo XLSX.");
+            }
+
+            if (arquivoCSV.delete()) {
+                Log.generateLog("Arquivo CSV deletado com sucesso.");
+            } else {
+                Log.generateLog("Falha ao deletar o arquivo CSV.");
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
