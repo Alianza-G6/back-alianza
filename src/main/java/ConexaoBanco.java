@@ -5,8 +5,6 @@ import java.io.IOException;
 
 public class ConexaoBanco {
 
-    //    jdbc:mysql://localhost:3306/Alianza -> TESTE LOCALHOST
-
     private static final String databaseUrl = System.getenv("DATABASE_URL");
     private static final String databaseUser = System.getenv("DATABASE_USER");
     private static final String databasePassword = System.getenv("DATABASE_PASSWORD");
@@ -15,6 +13,7 @@ public class ConexaoBanco {
 
     static {
         try {
+            Log.generateLog("Inicializando conexão com o banco de dados...");
             String logMessage = "Inicializando conexão com o banco de dados...";
             Log.generateLog(logMessage);
             try {
@@ -27,6 +26,7 @@ public class ConexaoBanco {
             dataSource.setUsername(databaseUser);
             dataSource.setPassword(databasePassword);
 
+            Log.generateLog("Conexão com o banco configurada com sucesso.");
             String successMessage = "Conexão com o banco configurada com sucesso.";
             Log.generateLog(successMessage);
             try {
@@ -37,6 +37,7 @@ public class ConexaoBanco {
         } catch (IOException e) {
             e.printStackTrace();
             try {
+                Log.generateLog("Erro na configuração do banco de dados: " + e.getMessage());
                 String errorMessage = "Erro na configuração do banco de dados: " + e.getMessage();
                 Log.generateLog(errorMessage);
                 NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);
@@ -50,6 +51,7 @@ public class ConexaoBanco {
 
     public static JdbcTemplate getConnection() {
         try {
+            Log.generateLog("Tentando estabelecer conexão com o banco de dados...");
             String logMessage = "Tentando estabelecer conexão com o banco de dados...";
             Log.generateLog(logMessage);
             try {
@@ -57,9 +59,8 @@ public class ConexaoBanco {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-
+            Log.generateLog("Conexão estabelecida com sucesso.");
             String successMessage = "Conexão estabelecida com sucesso.";
             Log.generateLog(successMessage);
             try {
@@ -67,11 +68,11 @@ public class ConexaoBanco {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return jdbcTemplate;
         } catch (Exception e) {
             e.printStackTrace();
             try {
+                Log.generateLog("Erro ao conectar ao banco de dados: " + e.getMessage());
                 String errorMessage = "Erro ao conectar ao banco de dados: " + e.getMessage();
                 Log.generateLog(errorMessage);
                 NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);

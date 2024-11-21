@@ -4,12 +4,10 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
-
 public class NotificacaoSlack {
     private static final String WEBHOOK_URL;
-
     static {
-        String url = "https://hooks.slack.com/services/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";
+        String url = "https://hooks.slack.com/services/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";
         try {
             url = new String(Files.readAllBytes(Paths.get("webhook_url")));
         } catch (IOException e) {
@@ -26,14 +24,12 @@ public class NotificacaoSlack {
     }
     public static void EnviarNotificacaoSlack(String message) throws Exception {
         String payload = "{\"text\":\"" + message + "\"}";
-
         URL url = new URL(WEBHOOK_URL);
         HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
         httpConn.setDoOutput(true);
         httpConn.setRequestMethod("POST");
         httpConn.setRequestProperty("Content-Type", "application/json");
         httpConn.setRequestProperty("Accept", "application/json");
-
         try (OutputStream os = httpConn.getOutputStream()) {
             byte[] input = payload.getBytes("utf-8");
             os.write(input, 0, input.length);

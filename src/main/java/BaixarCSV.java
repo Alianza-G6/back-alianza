@@ -11,7 +11,7 @@ public class BaixarCSV {
 
     public static String NOME_BASE_BAIXADA;
 
-    public void baixar(String NomeDataLake) throws IOException {
+    public void baixar(String NomeDataLake) {
         S3Client s3Client = new ConexaoS3().getS3Client();
 
         try {
@@ -23,7 +23,7 @@ public class BaixarCSV {
                 e.printStackTrace();
             }
 
-            List<S3Object> objects = S3Client.listObjects(ListObjectsRequest.builder()
+            List<S3Object> objects = s3Client.listObjects(ListObjectsRequest.builder()
                     .bucket(NomeDataLake)
                     .build()).contents();
 
@@ -34,11 +34,9 @@ public class BaixarCSV {
                         .build();
 
                 InputStream inputStream = s3Client.getObject(getObjectRequest, ResponseTransformer.toInputStream());
+                Files.copy(inputStream, new File(object.key()).toPath());
 
-                File destino = new File("src/" + object.key());
-                destino.getParentFile().mkdirs(); // Cria diretórios, se necessário
-                Files.copy(inputStream, destino.toPath());
-
+                Log.generateLog("Arquivo baixado com sucesso: " + object.key());
                 String successMessage = "Arquivo baixado com sucesso: " + object.key();
                 Log.generateLog(successMessage);
                 try {
@@ -47,10 +45,10 @@ public class BaixarCSV {
                     e.printStackTrace();
                 }
 
-                Log.generateLog("Arquivo baixado com sucesso: " + object.key());
                 NOME_BASE_BAIXADA = object.key();
             }
 
+            Log.generateLog("Download dos arquivos do bucket " + NomeDataLake + " finalizado.");
             String completionMessage = "Download dos arquivos do bucket " + NomeDataLake + " finalizado.";
             Log.generateLog(completionMessage);
             try {
@@ -62,6 +60,7 @@ public class BaixarCSV {
         } catch (IOException | S3Exception e) {
             e.printStackTrace();
             try {
+                Log.generateLog("Erro ao fazer download dos arquivos do bucket: " + NomeDataLake + " - " + e.getMessage());
                 String errorMessage = "Erro ao fazer download dos arquivos do bucket: " + NomeDataLake + " - " + e.getMessage();
                 Log.generateLog(errorMessage);
                 try {
@@ -72,7 +71,6 @@ public class BaixarCSV {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            Log.generateLog("Erro ao fazer download dos arquivos do bucket: " + NomeDataLake + " - " + e.getMessage());
         }
     }
 }

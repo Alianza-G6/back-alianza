@@ -12,7 +12,8 @@ public class Log {
     private static final long MAX_SIZE = 4 * 1024;
     private static int fileCount = 1;
     private static BufferedWriter bw;
-    private static FileWriter   fw;
+    private static FileWriter fw;
+    private static FileWriter fileWriter;
     private static Path logFilePath;
     public static void generateLog(String mensagem) throws IOException {
         if (bw == null || Files.size(logFilePath) >= MAX_SIZE) {
@@ -47,5 +48,5 @@ public class Log {
         bw.write(message);
         bw.flush();
         fileCount++;
+     }
     }
-}
