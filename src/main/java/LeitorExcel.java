@@ -24,12 +24,8 @@ public class LeitorExcel {
 
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
-                if (row == null) {
-                    System.out.println("Linha " + i + " está vazia. Pulando.");
-                    continue;
-                }
+                if (row == null) continue;
 
-                // Lendo dados do voo
                 String siglaCompanhia = row.getCell(0).getStringCellValue();
                 String numeroVoo = row.getCell(1).getStringCellValue();
                 String codigoDI = row.getCell(2).getStringCellValue();
@@ -43,7 +39,7 @@ public class LeitorExcel {
                 LocalDateTime chegadaReal = converterData(row.getCell(9));
                 String statusVoo = row.getCell(10).getStringCellValue();
 
-                System.out.println("Inserindo dados do voo: " + numeroVoo);
+                System.out.println("Lendo dados do voo: " + numeroVoo);
 
                 int fkCompanhia = obterOuInserirCompanhia(siglaCompanhia);
                 int fkAeroportoOrigem = obterOuInserirAeroporto(siglaAeroportoOrigem);
@@ -51,7 +47,7 @@ public class LeitorExcel {
 
                 inserirVoo(fkCompanhia, numeroVoo, codigoDI, codigoTipoLinha, fkAeroportoOrigem,
                         partidaPrevista, partidaReal, fkAeroportoDestino, chegadaPrevista, chegadaReal, statusVoo);
-
+                System.out.println("Voo inserido com sucesso: " + numeroVoo);
             }
             System.out.println("Leitura e inserção de dados concluídas.");
         } catch (IOException e) {
@@ -71,8 +67,7 @@ public class LeitorExcel {
         }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        LocalDateTime dataConvertida = LocalDateTime.parse(dataString, formatter);
-        return dataConvertida;
+        return LocalDateTime.parse(dataString, formatter);
     }
 
     private int obterOuInserirCompanhia(String siglaCompanhia) {
@@ -80,12 +75,9 @@ public class LeitorExcel {
         try {
             return jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaCompanhia);
         } catch (EmptyResultDataAccessException e) {
-            System.out.println("Companhia não encontrada, inserindo nova: " + siglaCompanhia);
             String sqlInsert = "INSERT INTO tbCompanhia (siglaICAO) VALUES (?)";
             jdbcTemplate.update(sqlInsert, siglaCompanhia);
-            int idCompanhia = jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaCompanhia);
-            System.out.println("Nova companhia inserida com ID: " + idCompanhia);
-            return idCompanhia;
+            return jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaCompanhia);
         }
     }
 
@@ -94,12 +86,9 @@ public class LeitorExcel {
         try {
             return jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaAeroporto);
         } catch (EmptyResultDataAccessException e) {
-            System.out.println("Aeroporto não encontrado, inserindo novo: " + siglaAeroporto);
             String sqlInsert = "INSERT INTO tbAeroporto (siglaICAO) VALUES (?)";
             jdbcTemplate.update(sqlInsert, siglaAeroporto);
-            int idAeroporto = jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaAeroporto);
-            System.out.println("Novo aeroporto inserido com ID: " + idAeroporto);
-            return idAeroporto;
+            return jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaAeroporto);
         }
     }
 
@@ -127,7 +116,6 @@ public class LeitorExcel {
             return null;
         }
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-        String dataFormatada = data.format(outputFormatter);
-        return dataFormatada;
+        return data.format(outputFormatter);
     }
 }

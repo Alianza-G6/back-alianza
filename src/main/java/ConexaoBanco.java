@@ -13,7 +13,6 @@ public class ConexaoBanco {
 
     static {
         try {
-            System.out.println("Inicializando conexão com o banco de dados...");
             Log.generateLog("Inicializando conexão com o banco de dados...");
             String logMessage = "Inicializando conexão com o banco de dados...";
             Log.generateLog(logMessage);
@@ -27,7 +26,6 @@ public class ConexaoBanco {
             dataSource.setUsername(databaseUser);
             dataSource.setPassword(databasePassword);
 
-            System.out.println("Conexão com o banco configurada com sucesso.");
             Log.generateLog("Conexão com o banco configurada com sucesso.");
             String successMessage = "Conexão com o banco configurada com sucesso.";
             Log.generateLog(successMessage);
@@ -38,7 +36,6 @@ public class ConexaoBanco {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Erro na configuração do banco de dados: " + e.getMessage());
             try {
                 Log.generateLog("Erro na configuração do banco de dados: " + e.getMessage());
                 String errorMessage = "Erro na configuração do banco de dados: " + e.getMessage();
@@ -54,7 +51,6 @@ public class ConexaoBanco {
 
     public static JdbcTemplate getConnection() {
         try {
-            System.out.println("Tentando estabelecer conexão com o banco de dados...");
             Log.generateLog("Tentando estabelecer conexão com o banco de dados...");
             String logMessage = "Tentando estabelecer conexão com o banco de dados...";
             Log.generateLog(logMessage);
@@ -64,7 +60,6 @@ public class ConexaoBanco {
                 e.printStackTrace();
             }
             JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-            System.out.println("Conexão estabelecida com sucesso.");
             Log.generateLog("Conexão estabelecida com sucesso.");
             String successMessage = "Conexão estabelecida com sucesso.";
             Log.generateLog(successMessage);
@@ -76,7 +71,6 @@ public class ConexaoBanco {
             return jdbcTemplate;
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Erro ao conectar ao banco de dados: " + e.getMessage());
             try {
                 Log.generateLog("Erro ao conectar ao banco de dados: " + e.getMessage());
                 String errorMessage = "Erro ao conectar ao banco de dados: " + e.getMessage();

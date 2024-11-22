@@ -4,10 +4,11 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
+
 public class NotificacaoSlack {
     private static final String WEBHOOK_URL;
     static {
-        String url = "https://hooks.slack.com/services/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";
+        String url = "https://hooks.slack.com/services/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";
         try {
             url = new String(Files.readAllBytes(Paths.get("webhook_url")));
         } catch (IOException e) {

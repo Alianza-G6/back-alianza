@@ -7,7 +7,6 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class Log {
     private static final long MAX_SIZE = 4 * 1024;
     private static int fileCount = 1;
@@ -25,7 +24,7 @@ public class Log {
         bw.write(timestamp + " - " + mensagem);
         bw.newLine();
         bw.flush();
-//        System.out.println("Log Gerado com sucesso!");
+        System.out.println("Log Gerado com sucesso!");
     }
     private static void openNewLogFile() throws IOException {
         Path logDirectoryPath = Paths.get("C:\\Users\\Public\\LogsAlianza");
@@ -48,5 +47,5 @@ public class Log {
         bw.write(message);
         bw.flush();
         fileCount++;
-     }
     }
+}

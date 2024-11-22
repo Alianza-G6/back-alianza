@@ -15,11 +15,6 @@ public class BaixarCSV {
         S3Client s3Client = new ConexaoS3().getS3Client();
 
         try {
-<<<<<<< HEAD
-            String mensagemIniciar = "Iniciando download dos arquivos do bucket: " + NomeDataLake;
-            Log.generateLog(mensagemIniciar);
-            System.out.println(mensagemIniciar);
-=======
             String logMessage = "Iniciando download dos arquivos do bucket: " + NomeDataLake;
             Log.generateLog(logMessage);
             try {
@@ -27,7 +22,6 @@ public class BaixarCSV {
             } catch (Exception e) {
                 e.printStackTrace();
             }
->>>>>>> refatoracaoETL
 
             List<S3Object> objects = s3Client.listObjects(ListObjectsRequest.builder()
                     .bucket(NomeDataLake)
@@ -42,23 +36,6 @@ public class BaixarCSV {
                 InputStream inputStream = s3Client.getObject(getObjectRequest, ResponseTransformer.toInputStream());
                 Files.copy(inputStream, new File(object.key()).toPath());
 
-<<<<<<< HEAD
-                String mensagemBaixado = "Arquivo baixado com sucesso: " + object.key();
-                Log.generateLog(mensagemBaixado);
-                System.out.println(mensagemBaixado);
-                NOME_BASE_BAIXADA = object.key();
-            }
-
-            String mensagemFinalizado = "Download dos arquivos do bucket " + NomeDataLake + " finalizado.";
-            Log.generateLog(mensagemFinalizado);
-            System.out.println(mensagemFinalizado);
-
-        } catch (IOException | S3Exception e) {
-            e.printStackTrace();
-            String mensagemErro = "Erro ao fazer download dos arquivos do bucket: " + NomeDataLake + " - " + e.getMessage();
-            Log.generateLog(mensagemErro);
-            System.out.println(mensagemErro);
-=======
                 Log.generateLog("Arquivo baixado com sucesso: " + object.key());
                 String successMessage = "Arquivo baixado com sucesso: " + object.key();
                 Log.generateLog(successMessage);
@@ -94,7 +71,6 @@ public class BaixarCSV {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
->>>>>>> refatoracaoETL
         }
     }
 }
