@@ -1,20 +1,20 @@
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.dao.EmptyResultDataAccessException;
+
 import java.time.format.DateTimeFormatter;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-public class LeitorExcel {
-    private final JdbcTemplate jdbcTemplate;
+public class LeitorExcel extends LeitorArquivo {
 
     public LeitorExcel(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        super(jdbcTemplate);
     }
 
-    public void lerEInserirDadosVoos(String caminhoArquivo) {
+    @Override
+    public void lerEInserirDados(String caminhoArquivo) {
         System.out.println("Iniciando a leitura do arquivo Excel: " + caminhoArquivo);
         try (FileInputStream fis = new FileInputStream(caminhoArquivo);
              Workbook workbook = new XSSFWorkbook(fis)) {
@@ -68,28 +68,6 @@ public class LeitorExcel {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         return LocalDateTime.parse(dataString, formatter);
-    }
-
-    private int obterOuInserirCompanhia(String siglaCompanhia) {
-        String sqlSelect = "SELECT idCompanhia FROM tbCompanhia WHERE siglaICAO = ?";
-        try {
-            return jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaCompanhia);
-        } catch (EmptyResultDataAccessException e) {
-            String sqlInsert = "INSERT INTO tbCompanhia (siglaICAO) VALUES (?)";
-            jdbcTemplate.update(sqlInsert, siglaCompanhia);
-            return jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaCompanhia);
-        }
-    }
-
-    private int obterOuInserirAeroporto(String siglaAeroporto) {
-        String sqlSelect = "SELECT idAeroporto FROM tbAeroporto WHERE siglaICAO = ?";
-        try {
-            return jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaAeroporto);
-        } catch (EmptyResultDataAccessException e) {
-            String sqlInsert = "INSERT INTO tbAeroporto (siglaICAO) VALUES (?)";
-            jdbcTemplate.update(sqlInsert, siglaAeroporto);
-            return jdbcTemplate.queryForObject(sqlSelect, Integer.class, siglaAeroporto);
-        }
     }
 
     private void inserirVoo(int fkCompanhia, String numeroVoo, String codigoDI, String codigoTipoLinha,

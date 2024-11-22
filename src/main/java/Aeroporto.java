@@ -1,19 +1,29 @@
-public class Aeroporto {
+public class Aeroporto extends Empresa {
+    private Integer idAeroporto;
+    private String nome;
 
-    private String sigla;
 
-    public String getSigla() {
-        return sigla;
+    public Integer getIdAeroporto() {
+        return idAeroporto;
     }
 
-    public void setSigla(String sigla) {
-        this.sigla = sigla;
+    public void setIdAeroporto(Integer idAeroporto) {
+        this.idAeroporto = idAeroporto;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     @Override
     public String toString() {
         return "Aeroporto{" +
-                "sigla='" + sigla + '\'' +
+                "idAeroporto=" + idAeroporto +
+                ", nome='" + nome + '\'' +
                 '}';
     }
 }
