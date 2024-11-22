@@ -8,8 +8,9 @@ import java.io.IOException;
 
 public class ConverterCSVparaXLSX {
 
-    public void converter() throws IOException {
+    public void converter() {
         String nomeCSV = BaixarCSV.NOME_BASE_BAIXADA;
+<<<<<<< HEAD
         File csvFile = new File("src/" + nomeCSV);
 
         if (!csvFile.exists()) {
@@ -17,12 +18,17 @@ public class ConverterCSVparaXLSX {
             System.out.println("Arquivo CSV não encontrado: " + csvFile.getAbsolutePath());
             return;
         }
+=======
+>>>>>>> refatoracaoETL
 
         try (Workbook workbook = new XSSFWorkbook();
-             BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
+             BufferedReader br = new BufferedReader(new FileReader(nomeCSV))) {
 
             System.out.println("Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV);
             Log.generateLog("Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV);
+            String logMessage = "Iniciando conversão do arquivo CSV para XLSX: " + nomeCSV;
+            Log.generateLog(logMessage);
+            enviarParaSlack(logMessage);
 
             Sheet planilha = workbook.createSheet("Dados");
             String linha;
@@ -45,19 +51,43 @@ public class ConverterCSVparaXLSX {
                 }
             }
 
-            String nomeBase = csvFile.getName();
+            String nomeBase = new File(nomeCSV).getName();
             String nomeXLSX = nomeBase.substring(0, nomeBase.lastIndexOf('.')) + ".xlsx";
             System.out.println("Nome do arquivo XLSX a ser criado: " + nomeXLSX);
 
             try (FileOutputStream escritor = new FileOutputStream("src/" + nomeXLSX)) {
                 workbook.write(escritor);
                 Log.generateLog("Arquivo XLSX criado com sucesso: " + nomeXLSX);
+<<<<<<< HEAD
                 System.out.println("Arquivo XLSX criado com sucesso: " + nomeXLSX);
             }
         } catch (IOException e) {
             e.printStackTrace();
             Log.generateLog("Erro ao converter o arquivo CSV para XLSX: " + e.getMessage());
             System.out.println("Erro ao converter o arquivo CSV para XLSX: " + e.getMessage());
+=======
+                String successMessage = "Arquivo XLSX criado com sucesso: " + nomeXLSX;
+                Log.generateLog(successMessage);
+                enviarParaSlack(successMessage);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            try {
+                Log.generateLog("Erro ao converter o arquivo CSV para XLSX: " + e.getMessage());
+                String errorMessage = "Erro ao converter o arquivo CSV para XLSX: " + e.getMessage();
+                Log.generateLog(errorMessage);
+                enviarParaSlack(errorMessage);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+>>>>>>> refatoracaoETL
+        }
+    }
+    public void enviarParaSlack(String message) {
+        try {
+            NotificacaoSlack.EnviarNotificacaoSlack(message);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

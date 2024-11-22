@@ -15,6 +15,13 @@ public class ConexaoBanco {
         try {
             System.out.println("Inicializando conexão com o banco de dados...");
             Log.generateLog("Inicializando conexão com o banco de dados...");
+            String logMessage = "Inicializando conexão com o banco de dados...";
+            Log.generateLog(logMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(logMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             dataSource.setUrl(databaseUrl);
             dataSource.setUsername(databaseUser);
@@ -22,12 +29,24 @@ public class ConexaoBanco {
 
             System.out.println("Conexão com o banco configurada com sucesso.");
             Log.generateLog("Conexão com o banco configurada com sucesso.");
+            String successMessage = "Conexão com o banco configurada com sucesso.";
+            Log.generateLog(successMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(successMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Erro na configuração do banco de dados: " + e.getMessage());
             try {
                 Log.generateLog("Erro na configuração do banco de dados: " + e.getMessage());
+                String errorMessage = "Erro na configuração do banco de dados: " + e.getMessage();
+                Log.generateLog(errorMessage);
+                NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);
             } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
         }
@@ -37,16 +56,35 @@ public class ConexaoBanco {
         try {
             System.out.println("Tentando estabelecer conexão com o banco de dados...");
             Log.generateLog("Tentando estabelecer conexão com o banco de dados...");
+            String logMessage = "Tentando estabelecer conexão com o banco de dados...";
+            Log.generateLog(logMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(logMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
             System.out.println("Conexão estabelecida com sucesso.");
             Log.generateLog("Conexão estabelecida com sucesso.");
+            String successMessage = "Conexão estabelecida com sucesso.";
+            Log.generateLog(successMessage);
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack(successMessage);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return jdbcTemplate;
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Erro ao conectar ao banco de dados: " + e.getMessage());
             try {
                 Log.generateLog("Erro ao conectar ao banco de dados: " + e.getMessage());
+                String errorMessage = "Erro ao conectar ao banco de dados: " + e.getMessage();
+                Log.generateLog(errorMessage);
+                NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);
             } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
             return null;
