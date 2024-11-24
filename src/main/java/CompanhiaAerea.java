@@ -1,54 +1,28 @@
-import java.util.List;
+public class CompanhiaAerea extends Empresa {
+    private Integer idCompanhia;
+    private String nome;
 
-public class CompanhiaAerea {
-
-    private List<Voo> voos;
-    private String siglaICAO;
-    private Integer id;
-
-    public CompanhiaAerea() {
-
+    public Integer getIdCompanhia() {
+        return idCompanhia;
     }
 
-    public Integer getId() {
-        return id;
+    public void setIdCompanhia(Integer idCompanhia) {
+        this.idCompanhia = idCompanhia;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public String getNome() {
+        return nome;
     }
 
-
-    public CompanhiaAerea(String siglaICAO, List<Voo> voos) {
-        this.siglaICAO = siglaICAO;
-        this.voos = voos;
-    }
-
-
-    public String getSiglaICAO(String razaoSocial) {
-        return siglaICAO;
-    }
-
-
-    public void setSiglaICAO(String siglaICAO) {
-        this.siglaICAO = siglaICAO;
-    }
-
-
-    public List<Voo> getVoos() {
-        return voos;
-    }
-
-
-    public void setVoos(List<Voo> voos) {
-        this.voos = voos;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     @Override
     public String toString() {
         return "CompanhiaAerea{" +
-                "siglaICAO='" + siglaICAO + '\'' +
-                ", voos=" + voos +
+                "idCompanhia=" + idCompanhia +
+                ", nome='" + nome + '\'' +
                 '}';
     }
 }
