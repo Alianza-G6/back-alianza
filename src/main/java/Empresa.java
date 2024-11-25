@@ -1,4 +1,4 @@
-public class Empresa {
+public abstract class Empresa {
     private String siglaICAO;
 
     public String getSiglaICAO() {

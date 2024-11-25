@@ -14,6 +14,7 @@ public class Log {
     private static FileWriter fw;
     private static FileWriter fileWriter;
     private static Path logFilePath;
+
     public static void generateLog(String mensagem) throws IOException {
         if (bw == null || Files.size(logFilePath) >= MAX_SIZE) {
             openNewLogFile();
@@ -26,6 +27,25 @@ public class Log {
         bw.flush();
         System.out.println("Log Gerado com sucesso!");
     }
+
+    public static void logAndSlack(String mensagem) throws IOException {
+        generateLog(mensagem);
+        try {
+            NotificacaoSlack.EnviarNotificacaoSlack(mensagem);
+        } catch (Exception e) {
+            generateLog("Erro ao enviar notificação ao Slack: " + e.getMessage());
+        }
+    }
+
+    public static void logAndSlackErro(String mensagem, Exception e) throws IOException {
+        generateLog(mensagem + " - Detalhes: " + e.getMessage());
+        try {
+            NotificacaoSlack.EnviarNotificacaoSlack(mensagem);
+        } catch (Exception slackException) {
+            generateLog("Erro ao enviar notificação de erro ao Slack: " + slackException.getMessage());
+        }
+    }
+
     private static void openNewLogFile() throws IOException {
         Path logDirectoryPath = Paths.get("C:\\Users\\Public\\LogsAlianza");
         if (!Files.exists(logDirectoryPath)) {
@@ -35,15 +55,7 @@ public class Log {
         logFilePath = logDirectoryPath.resolve(logFileName);
         fw = new FileWriter(logFilePath.toFile(), true);
         bw = new BufferedWriter(fw);
-        String message = "/****************/\n" +
-                "* Nome da Empresa: Alianza\n" +
-                "* Tipo de Documento: Confidencial\n" +
-                "* \n" +
-                "* Este documento contém informações confidenciais\n" +
-                "* da empresa SPECTRA. A divulgação, distribuição,\n" +
-                "* ou cópia deste documento é estritamente proibida\n" +
-                "* sem autorização prévia.\n" +
-                "/****************/\n\n";
+        String message = "/****************/\n" + "* Nome da Empresa: Alianza\n" + "* Tipo de Documento: Confidencial\n" + "* \n" + "* Este documento contém informações confidenciais\n" + "* da empresa SPECTRA. A divulgação, distribuição,\n" + "* ou cópia deste documento é estritamente proibida\n" + "* sem autorização prévia.\n" + "/****************/\n\n";
         bw.write(message);
         bw.flush();
         fileCount++;

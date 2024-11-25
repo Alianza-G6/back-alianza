@@ -1,54 +1,33 @@
 import org.springframework.jdbc.core.JdbcTemplate;
-
-import java.io.File;
-import java.io.IOException;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 
 public class Main {
     public static void main(String[] args) {
-        try {
-            Log.generateLog("Aplicação iniciada.");
+        try (ConexaoS3 conexaoS3 = new ConexaoS3(); ConexaoBanco conexaoBanco = new ConexaoBanco()) {
+
+            System.out.println("Iniciando aplicação...");
 
             JdbcTemplate jdbcTemplate = ConexaoBanco.getConnection();
-            Log.generateLog("Conexão com o banco de dados estabelecida.");
+            S3Client s3Client = conexaoS3.getS3Client();
 
-            BaixarCSV baixarBase = new BaixarCSV();
-            baixarBase.baixar("s3-alianza");
-            Log.generateLog("Arquivo CSV baixado.");
+            String bucketName = "s3-alianza";
+            String prefix = "baseDeDados/";
 
-            ConverterCSVparaXLSX converterCSVparaXLSX = new ConverterCSVparaXLSX();
-            converterCSVparaXLSX.converter();
-            Log.generateLog("Arquivo CSV convertido para XLSX.");
+            ListObjectsV2Request listObjects = ListObjectsV2Request.builder()
+                    .bucket(bucketName)
+                    .prefix(prefix)
+                    .build();
+            ListObjectsV2Response listResponse = s3Client.listObjectsV2(listObjects);
 
-            LeitorExcel leitorExcel = new LeitorExcel(jdbcTemplate);
-            String caminhoArquivo = "src\\vra_2022_11.xlsx";
-            leitorExcel.lerEInserirDadosVoos(caminhoArquivo);
+            LeitorExcel leitorExcel = new LeitorExcel(jdbcTemplate, s3Client);
+            leitorExcel.lerEInserirDados();
 
-            Log.generateLog("Aplicação finalizada.");
-
-
-            File arquivoXLSX = new File("src/vra_2022_11.xlsx");
-            File arquivoCSV = new File("vra_2022_11.csv");
-
-            if (arquivoXLSX.delete()) {
-                Log.generateLog("Arquivo XLSX deletado com sucesso.");
-            } else {
-                Log.generateLog("Falha ao deletar o arquivo XLSX.");
-            }
-
-            if (arquivoCSV.delete()) {
-                Log.generateLog("Arquivo CSV deletado com sucesso.");
-            } else {
-                Log.generateLog("Falha ao deletar o arquivo CSV.");
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            try {
-                Log.generateLog("Erro ao gerar log: " + e.getMessage());
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            System.out.println("Leitura e inserção de dados concluídas.");
+            System.out.println("Finalizando aplicação com sucesso...");
         } catch (Exception e) {
+            System.out.println("Erro durante a execução da aplicação: " + e.getMessage());
             e.printStackTrace();
         }
     }

@@ -1,28 +1,18 @@
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.io.IOException;
 
 public class NotificacaoSlack {
     private static final String WEBHOOK_URL;
+
     static {
-        String url = "https://hooks.slack.com/services/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";
-        try {
-            url = new String(Files.readAllBytes(Paths.get("webhook_url")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        WEBHOOK_URL = url.trim();
-    }
-    public static void main(String[] args) {
-        try {
-            EnviarNotificacaoSlack("Teste funcionando");
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Obtém a URL diretamente da variável de ambiente
+        WEBHOOK_URL = System.getenv("SLACK_URL");
+        if (WEBHOOK_URL == null || WEBHOOK_URL.isEmpty()) {
+            throw new IllegalArgumentException("A variável de ambiente SLACK_URL não foi definida.");
         }
     }
+
     public static void EnviarNotificacaoSlack(String message) throws Exception {
         String payload = "{\"text\":\"" + message + "\"}";
         URL url = new URL(WEBHOOK_URL);
@@ -31,10 +21,14 @@ public class NotificacaoSlack {
         httpConn.setRequestMethod("POST");
         httpConn.setRequestProperty("Content-Type", "application/json");
         httpConn.setRequestProperty("Accept", "application/json");
+
+        // Envia o payload para o Slack
         try (OutputStream os = httpConn.getOutputStream()) {
             byte[] input = payload.getBytes("utf-8");
             os.write(input, 0, input.length);
         }
+
+        // Obtém a resposta do servidor
         int responseCode = httpConn.getResponseCode();
         System.out.println("Response Code: " + responseCode);
     }

@@ -8,8 +8,7 @@ public abstract class LeitorArquivo {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // Método abstrato para ser implementado pela classe derivada
-    public abstract void lerEInserirDados(String caminhoArquivo);
+    public abstract void lerEInserirDados();
 
     protected int obterOuInserirCompanhia(String siglaCompanhia) {
         String sqlSelect = "SELECT idCompanhia FROM tbCompanhia WHERE siglaICAO = ?";
