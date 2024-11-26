@@ -6,7 +6,6 @@ public class NotificacaoSlack {
     private static final String WEBHOOK_URL;
 
     static {
-        // Obtém a URL diretamente da variável de ambiente
         WEBHOOK_URL = System.getenv("SLACK_URL");
         if (WEBHOOK_URL == null || WEBHOOK_URL.isEmpty()) {
             throw new IllegalArgumentException("A variável de ambiente SLACK_URL não foi definida.");
@@ -22,13 +21,11 @@ public class NotificacaoSlack {
         httpConn.setRequestProperty("Content-Type", "application/json");
         httpConn.setRequestProperty("Accept", "application/json");
 
-        // Envia o payload para o Slack
         try (OutputStream os = httpConn.getOutputStream()) {
             byte[] input = payload.getBytes("utf-8");
             os.write(input, 0, input.length);
         }
 
-        // Obtém a resposta do servidor
         int responseCode = httpConn.getResponseCode();
         System.out.println("Response Code: " + responseCode);
     }

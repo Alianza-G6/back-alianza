@@ -8,7 +8,7 @@ public abstract class LeitorArquivo {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public abstract void lerEInserirDados();
+    public abstract void lerEInserirDados() throws Exception;
 
     protected int obterOuInserirCompanhia(String siglaCompanhia) {
         String sqlSelect = "SELECT idCompanhia FROM tbCompanhia WHERE siglaICAO = ?";

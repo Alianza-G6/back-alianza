@@ -12,23 +12,25 @@ public class ConexaoBanco implements AutoCloseable {
 
     static {
         try {
-            // Log para indicar que a configuração do banco de dados está sendo iniciada
-            System.out.println("Inicializando conexão com o banco de dados...");
 
             dataSource.setUrl(databaseUrl);
             dataSource.setUsername(databaseUser);
             dataSource.setPassword(databasePassword);
+            NotificacaoSlack.EnviarNotificacaoSlack("Conexão com o banco configurada com sucesso.");
 
-            // Log para indicar que a configuração foi realizada com sucesso
             System.out.println("Conexão com o banco configurada com sucesso.");
         } catch (Exception e) {
+            try {
+                NotificacaoSlack.EnviarNotificacaoSlack("Erro na configuração do banco de dados");
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
             System.out.println("Erro na configuração do banco de dados");
             throw new RuntimeException(e);
         }
     }
 
     public ConexaoBanco() {
-        // Inicia a conexão com o banco de dados
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
@@ -37,15 +39,16 @@ public class ConexaoBanco implements AutoCloseable {
     }
 
     @Override
-    public void close() {
-        // Fechar a conexão do datasource quando a classe for fechada
+    public void close() throws Exception {
         try {
             if (dataSource != null) {
                 dataSource.close();
                 System.out.println("Conexão com o banco fechada com sucesso.");
+                NotificacaoSlack.EnviarNotificacaoSlack("Conexão com o banco fechada com sucesso.");
             }
         } catch (Exception e) {
             System.out.println("Erro ao fechar a conexão com o banco de dados");
+            NotificacaoSlack.EnviarNotificacaoSlack("Erro ao fechar a conexão com o banco de dados");
         }
     }
 }

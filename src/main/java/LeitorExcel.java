@@ -22,11 +22,13 @@ public class LeitorExcel extends LeitorArquivo {
     }
 
     @Override
-    public void lerEInserirDados() {
+    public void lerEInserirDados() throws Exception {
         try {
             System.out.println("Iniciando processamento...");
+            NotificacaoSlack.EnviarNotificacaoSlack("Iniciando processamento...");
             String nomeArquivo = buscarArquivoMaisRecente();
             System.out.println("Arquivo mais recente encontrado: " + nomeArquivo);
+            NotificacaoSlack.EnviarNotificacaoSlack("Arquivo mais recente encontrado: " + nomeArquivo);
 
             try (ResponseInputStream<GetObjectResponse> s3Object = s3Client.getObject(builder -> builder.bucket(bucketName).key(nomeArquivo));
                  InputStream inputStream = s3Object;
@@ -34,6 +36,7 @@ public class LeitorExcel extends LeitorArquivo {
 
                 Sheet sheet = workbook.getSheetAt(0);
                 System.out.println("Planilha carregada. Iniciando a leitura.");
+                NotificacaoSlack.EnviarNotificacaoSlack("Planilha carregada. Iniciando a leitura.");
 
                 Map<String, Integer> cacheCompanhias = carregarCompanhiasExistentes();
                 Map<String, Integer> cacheAeroportos = carregarAeroportosExistentes();
@@ -81,17 +84,20 @@ public class LeitorExcel extends LeitorArquivo {
                 }
 
                 System.out.println("Processamento concluído com sucesso!");
+                NotificacaoSlack.EnviarNotificacaoSlack("Processamento concluído com sucesso!");
             }
         } catch (Exception e) {
             System.err.println("Erro durante o processamento: " + e.getMessage());
+            NotificacaoSlack.EnviarNotificacaoSlack("Erro durante o processamento: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    private void logTempoInsercao() {
+    private void logTempoInsercao() throws Exception {
         LocalDateTime agora = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.println("Inserindo lote de 1000 voos às " + agora.format(formatter));
+        NotificacaoSlack.EnviarNotificacaoSlack("Inserindo lote de 1000 voos às " + agora.format(formatter));
     }
 
     private String buscarArquivoMaisRecente() {
@@ -126,12 +132,13 @@ public class LeitorExcel extends LeitorArquivo {
         });
     }
 
-    private void inserirVoosEmLote(List<Object[]> voosBatch) {
+    private void inserirVoosEmLote(List<Object[]> voosBatch) throws Exception {
         String sql = "INSERT INTO voo (fkCompanhia, numeroVoo, codigoDI, codigoTipoLinha, fkAeroportoOrigem, " +
                 "partidaPrevista, partidaReal, fkAeroportoDestino, chegadaPrevista, chegadaReal, StatusVoo) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.batchUpdate(sql, voosBatch);
         System.out.println(voosBatch.size() + " voos inseridos em lote.");
+        NotificacaoSlack.EnviarNotificacaoSlack(voosBatch.size() + " voos inseridos em lote.");
     }
 
     private String getStringValueFromCell(Cell cell) {
