@@ -44,31 +44,47 @@ public class Log {
 
     // Método para abrir um novo arquivo de log
     private static void openNewLogFile() throws IOException {
-        Path logDirectoryPath = Paths.get("C:\\Users\\Public\\LogsAlianza");
+        // Define o diretório de logs
+        Path logDirectoryPath = Paths.get("/app/logs");
+
+        // Verifica se o diretório existe, cria se não existir
         if (!Files.exists(logDirectoryPath)) {
-            Files.createDirectory(logDirectoryPath);
+            Files.createDirectories(logDirectoryPath);
+            System.out.println("Diretório de logs criado: " + logDirectoryPath.toAbsolutePath());
         }
 
+        // Gera o nome do arquivo com base em um contador ou timestamp
         String logFileName = "log_" + fileCount + ".txt";
         logFilePath = logDirectoryPath.resolve(logFileName);
 
-        fw = new FileWriter(logFilePath.toFile(), true);
+        boolean isNewFile = !Files.exists(logFilePath);
+
+        // Inicializa o FileWriter e BufferedWriter
+        fw = new FileWriter(logFilePath.toFile(), true); // Abre em modo "append"
         bw = new BufferedWriter(fw);
 
-        // Escreve cabeçalho inicial no arquivo de log
-        String message = "/****************/\n" +
-                "* Nome da Empresa: Alianza\n" +
-                "* Tipo de Documento: Confidencial\n" +
-                "* \n" +
-                "* Este documento contém informações confidenciais\n" +
-                "* da empresa Alianza. A divulgação, distribuição,\n" +
-                "* ou cópia deste documento é estritamente proibida\n" +
-                "* sem autorização prévia.\n" +
-                "/****************/\n\n";
-        bw.write(message);
-        bw.flush();
+        // Escreve cabeçalho inicial apenas se o arquivo for novo
+        if (isNewFile) {
+            String header = """
+            /****************/
+            * Nome da Empresa: Alianza
+            * Tipo de Documento: Confidencial
+            * 
+            * Este documento contém informações confidenciais
+            * da empresa Alianza. A divulgação, distribuição,
+            * ou cópia deste documento é estritamente proibida
+            * sem autorização prévia.
+            /****************/
+            
+            """;
+            bw.write(header);
+            bw.flush();
+            System.out.println("Cabeçalho escrito no novo arquivo de log.");
+        }
 
+        // Incrementa o contador para futuros arquivos
         fileCount++;
+        System.out.println("Arquivo de log aberto: " + logFilePath.toAbsolutePath());
     }
 
     // Método para fechar o arquivo atual de log

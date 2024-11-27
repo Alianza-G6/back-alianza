@@ -5,30 +5,50 @@ import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        try (ConexaoS3 conexaoS3 = new ConexaoS3(); ConexaoBanco conexaoBanco = new ConexaoBanco()) {
-
+        try {
+            // Log inicial da aplicação
+            Log.generateLog("Iniciando aplicação...");
             System.out.println("Iniciando aplicação...");
             NotificacaoSlack.EnviarNotificacaoSlack("Iniciando aplicação...");
 
-            JdbcTemplate jdbcTemplate = ConexaoBanco.getConnection();
-            S3Client s3Client = conexaoS3.getS3Client();
+            try (ConexaoS3 conexaoS3 = new ConexaoS3(); ConexaoBanco conexaoBanco = new ConexaoBanco()) {
+                // Estabelecendo conexão com o banco de dados
+                JdbcTemplate jdbcTemplate = ConexaoBanco.getConnection();
+                Log.generateLog("Conexão com o banco de dados estabelecida com sucesso.");
 
-            String bucketName = "s3-alianza";
-            String prefix = "baseDeDados/";
+                // Estabelecendo conexão com o S3
+                S3Client s3Client = conexaoS3.getS3Client();
+                Log.generateLog("Conexão com o serviço S3 estabelecida com sucesso.");
 
-            ListObjectsV2Request listObjects = ListObjectsV2Request.builder().bucket(bucketName).prefix(prefix).build();
-            ListObjectsV2Response listResponse = s3Client.listObjectsV2(listObjects);
+                // Configurando bucket e prefixo
+                String bucketName = "s3-alianza";
+                String prefix = "baseDeDados/";
 
-            LeitorExcel leitorExcel = new LeitorExcel(jdbcTemplate, s3Client);
-            leitorExcel.lerEInserirDados();
+                // Listando objetos do bucket
+                ListObjectsV2Request listObjects = ListObjectsV2Request.builder()
+                        .bucket(bucketName)
+                        .prefix(prefix)
+                        .build();
+                ListObjectsV2Response listResponse = s3Client.listObjectsV2(listObjects);
+                Log.generateLog("Lista de objetos do bucket " + bucketName + " obtida com sucesso.");
 
-            System.out.println("Leitura e inserção de dados concluídas.");
-            NotificacaoSlack.EnviarNotificacaoSlack("Leitura e inserção de dados concluídas.");
+                // Processando os dados do Excel
+                LeitorExcel leitorExcel = new LeitorExcel(jdbcTemplate, s3Client);
+                leitorExcel.lerEInserirDados();
+                Log.generateLog("Leitura e inserção de dados concluídas com sucesso.");
+            }
+
+            // Finalizando aplicação
+            Log.generateLog("Finalizando aplicação com sucesso.");
             System.out.println("Finalizando aplicação com sucesso...");
-            NotificacaoSlack.EnviarNotificacaoSlack("Finalizando aplicação com sucesso...");
+            NotificacaoSlack.EnviarNotificacaoSlack("Finalizando aplicação com sucesso.");
+
         } catch (Exception e) {
-            System.out.println("Erro durante a execução da aplicação: " + e.getMessage());
-            NotificacaoSlack.EnviarNotificacaoSlack("Erro durante a execução da aplicação: " + e.getMessage());
+            // Log de erros
+            String errorMessage = "Erro durante a execução da aplicação: " + e.getMessage();
+            Log.generateLog(errorMessage);
+            System.out.println(errorMessage);
+            NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);
             e.printStackTrace();
         }
     }
