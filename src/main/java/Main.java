@@ -40,6 +40,7 @@ public class Main {
 
             // Finalizando aplicação
             Log.generateLog("Finalizando aplicação com sucesso.");
+            Log.closeLogFile();
             System.out.println("Finalizando aplicação com sucesso...");
             NotificacaoSlack.EnviarNotificacaoSlack("Finalizando aplicação com sucesso.");
 

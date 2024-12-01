@@ -12,7 +12,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 public class Log {
-    private static final long MAX_SIZE = 1024; // Tamanho máximo do arquivo (1 KB)
+    private static final long MAX_SIZE = 4 * 1024; // Tamanho máximo do arquivo (1 KB)
     private static BufferedWriter bw;
     private static FileWriter fw;
     private static Path logFilePath;
@@ -87,7 +87,7 @@ public class Log {
     }
 
     // Método para fechar o arquivo atual de log
-    private static void closeLogFile() throws IOException {
+    static void closeLogFile() throws IOException {
         if (bw != null) {
             bw.close();
             fw.close();
