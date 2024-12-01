@@ -12,8 +12,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.core.sync.RequestBody;
 
 public class Log {
-    private static final long MAX_SIZE = 4 * 1024; // Tamanho máximo do arquivo (4 KB)
-    private static int fileCount = 1; // Contador para arquivos de log
+    private static final long MAX_SIZE = 1024; // Tamanho máximo do arquivo (1 KB)
     private static BufferedWriter bw;
     private static FileWriter fw;
     private static Path logFilePath;
@@ -53,8 +52,10 @@ public class Log {
             System.out.println("Diretório de logs criado: " + logDirectoryPath.toAbsolutePath());
         }
 
-        // Gera o nome do arquivo com base em um contador ou timestamp
-        String logFileName = "log_" + fileCount + ".txt";
+        // Gera o nome do arquivo com data e hora
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd_MM_yyyy_HH_mm");
+        String logFileName = "log_" + now.format(formatter) + ".txt";
         logFilePath = logDirectoryPath.resolve(logFileName);
 
         boolean isNewFile = !Files.exists(logFilePath);
@@ -82,8 +83,6 @@ public class Log {
             System.out.println("Cabeçalho escrito no novo arquivo de log.");
         }
 
-        // Incrementa o contador para futuros arquivos
-        fileCount++;
         System.out.println("Arquivo de log aberto: " + logFilePath.toAbsolutePath());
     }
 
@@ -112,6 +111,16 @@ public class Log {
             System.out.println("Arquivo " + logFilePath.getFileName() + " enviado para o bucket S3 na pasta 'logs' com sucesso.");
         } catch (Exception e) {
             System.err.println("Erro ao enviar arquivo para o S3: " + e.getMessage());
+        }
+    }
+
+    // Método para tratar erro e registrar no log, além de enviar ao S3
+    public static void tratarErroComLog(Exception e) {
+        try {
+            generateLog("Erro crítico: " + e.getMessage());
+            uploadLogToS3(); // Envia o log para o S3 imediatamente após o erro
+        } catch (IOException ex) {
+            System.err.println("Erro ao gerar log para o erro crítico: " + ex.getMessage());
         }
     }
 }

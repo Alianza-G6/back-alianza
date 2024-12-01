@@ -44,11 +44,10 @@ public class Main {
             NotificacaoSlack.EnviarNotificacaoSlack("Finalizando aplicação com sucesso.");
 
         } catch (Exception e) {
-            // Log de erros
-            String errorMessage = "Erro durante a execução da aplicação: " + e.getMessage();
-            Log.generateLog(errorMessage);
-            System.out.println(errorMessage);
-            NotificacaoSlack.EnviarNotificacaoSlack(errorMessage);
+            // Log de erros e envio para o S3
+            Log.tratarErroComLog(e);  // Usando o método para log de erro e envio para o S3
+            System.out.println("Erro durante a execução da aplicação: " + e.getMessage());
+            NotificacaoSlack.EnviarNotificacaoSlack("Erro durante a execução da aplicação: " + e.getMessage());
             e.printStackTrace();
         }
     }
