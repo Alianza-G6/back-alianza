@@ -17,8 +17,9 @@ public class ConexaoBanco implements AutoCloseable {
             dataSource.setUsername(databaseUser);
             dataSource.setPassword(databasePassword);
             NotificacaoSlack.EnviarNotificacaoSlack("Conexão com o banco configurada com sucesso.");
-
             System.out.println("Conexão com o banco configurada com sucesso.");
+            Log.generateLog("Conexão com o banco configurada com sucesso.");
+
         } catch (Exception e) {
             try {
                 NotificacaoSlack.EnviarNotificacaoSlack("Erro na configuração do banco de dados");
@@ -26,6 +27,7 @@ public class ConexaoBanco implements AutoCloseable {
                 throw new RuntimeException(ex);
             }
             System.out.println("Erro na configuração do banco de dados");
+            Log.tratarErroComLog(e);
             throw new RuntimeException(e);
         }
     }
@@ -44,10 +46,12 @@ public class ConexaoBanco implements AutoCloseable {
             if (dataSource != null) {
                 dataSource.close();
                 System.out.println("Conexão com o banco fechada com sucesso.");
+                Log.generateLog("Conexão com o banco fechada com sucesso.");
                 NotificacaoSlack.EnviarNotificacaoSlack("Conexão com o banco fechada com sucesso.");
             }
         } catch (Exception e) {
             System.out.println("Erro ao fechar a conexão com o banco de dados");
+            Log.tratarErroComLog(e);
             NotificacaoSlack.EnviarNotificacaoSlack("Erro ao fechar a conexão com o banco de dados");
         }
     }

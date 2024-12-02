@@ -25,9 +25,11 @@ public class LeitorExcel extends LeitorArquivo {
     public void lerEInserirDados() throws Exception {
         try {
             System.out.println("Iniciando processamento...");
+            Log.generateLog("Iniciando processamento...");
             NotificacaoSlack.EnviarNotificacaoSlack("Iniciando processamento...");
             String nomeArquivo = buscarArquivoMaisRecente();
             System.out.println("Arquivo mais recente encontrado: " + nomeArquivo);
+            Log.generateLog("Arquivo mais recente encontrado: " + nomeArquivo);
             NotificacaoSlack.EnviarNotificacaoSlack("Arquivo mais recente encontrado: " + nomeArquivo);
 
             try (ResponseInputStream<GetObjectResponse> s3Object = s3Client.getObject(builder -> builder.bucket(bucketName).key(nomeArquivo));
@@ -36,6 +38,7 @@ public class LeitorExcel extends LeitorArquivo {
 
                 Sheet sheet = workbook.getSheetAt(0);
                 System.out.println("Planilha carregada. Iniciando a leitura.");
+                Log.generateLog("Planilha carregada. Iniciando a leitura.");
                 NotificacaoSlack.EnviarNotificacaoSlack("Planilha carregada. Iniciando a leitura.");
 
                 Map<String, Integer> cacheCompanhias = carregarCompanhiasExistentes();
@@ -84,10 +87,12 @@ public class LeitorExcel extends LeitorArquivo {
                 }
 
                 System.out.println("Processamento concluído com sucesso!");
+                Log.generateLog("Processamento concluído com sucesso!");
                 NotificacaoSlack.EnviarNotificacaoSlack("Processamento concluído com sucesso!");
             }
         } catch (Exception e) {
             System.err.println("Erro durante o processamento: " + e.getMessage());
+            Log.tratarErroComLog(e);
             NotificacaoSlack.EnviarNotificacaoSlack("Erro durante o processamento: " + e.getMessage());
             e.printStackTrace();
         }
@@ -97,6 +102,7 @@ public class LeitorExcel extends LeitorArquivo {
         LocalDateTime agora = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         System.out.println("Inserindo lote de 1000 voos às " + agora.format(formatter));
+        Log.generateLog("Inserindo lote de 1000 voos às " + agora.format(formatter));
         NotificacaoSlack.EnviarNotificacaoSlack("Inserindo lote de 1000 voos às " + agora.format(formatter));
     }
 
