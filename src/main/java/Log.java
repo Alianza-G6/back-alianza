@@ -16,6 +16,7 @@ public class Log {
     private static BufferedWriter bw;
     private static FileWriter fw;
     private static Path logFilePath;
+    private static boolean isClosing = false;
 
     // Nome do bucket S3 e pasta
     private static final String BUCKET_NAME = "s3-alianza";
@@ -24,8 +25,16 @@ public class Log {
     // Instância de conexão com o S3
     private static final ConexaoS3 conexaoS3 = new ConexaoS3();
 
+
+
     // Método para gerar logs
     public static void generateLog(String mensagem) throws IOException {
+        // Verifica se o arquivo está sendo fechado para evitar recursão
+        if (isClosing) {
+            System.err.println("Evitar recursão no Log: " + mensagem);
+            return;
+        }
+
         // Verifica se precisa rotacionar o arquivo de log
         if (bw == null || Files.size(logFilePath) >= MAX_SIZE) {
             closeLogFile(); // Fecha o arquivo atual antes de abrir um novo
@@ -64,7 +73,7 @@ public class Log {
         fw = new FileWriter(logFilePath.toFile(), true); // Abre em modo "append"
         bw = new BufferedWriter(fw);
 
-        // Escreve cabeçalho inicial apenas se o arquivo for novo
+        // Escreve cabeçalho inicial
         if (isNewFile) {
             String header = """
             /****************/
@@ -89,15 +98,18 @@ public class Log {
     // Método para fechar o arquivo atual de log
     static void closeLogFile() throws IOException {
         if (bw != null) {
-            bw.close();
-            fw.close();
-
-            // Envia o arquivo de log para o bucket S3
-            uploadLogToS3();
+            isClosing = true;
+            try {
+                bw.close();
+                fw.close();
+                uploadLogToS3();
+            } finally {
+                isClosing = false;
+            }
         }
     }
 
-    // Método para enviar o arquivo de log ao S3
+    // Enviando Log para o S3
     private static void uploadLogToS3() {
         try {
             S3Client s3Client = conexaoS3.getS3Client();
